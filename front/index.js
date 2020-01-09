@@ -2,7 +2,7 @@ const ENDPOINT = 'http://localhost:5200'
 
 function getProductList() {
     console.log('getting product list')
-    fetch(ENDPOINT + '/productList')
+    fetch(ENDPOINT + '/reps')
         .then(res => res.json())
         .then(data => loadDataIntoTable(data))
 }
@@ -12,14 +12,13 @@ function loadDataIntoTable(data) {
     t.innerHTML = '' //clear out the old data so there is no DOM duplication
 
     data.map(row => {
-        const { productKey, productName, productDescription, active } = row
+        const { jobName, repName, lunchName } = row
         let tr = document.createElement('tr')
 
         tr.innerHTML = `
-            <td>${productKey}</td>
-            <td>${productName}</td>
-            <td>${productDescription}</td>
-            <td>${active}</td>
+            <td>${jobName}</td>
+            <td>${repName}</td>
+            <td>${lunchName}</td>
             `
 
         t.appendChild(tr)
