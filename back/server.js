@@ -31,7 +31,19 @@ app.get('/', (req, res) => {
 })
 
 app.get('/reps', async (req, res) => {
-    await request.query('Declare	@datecounter int,	@repcounter int set @datecounter = (select datediff(WEEK, \'2019-12-21 17:25:09.487\', getdate())) set @repcounter = (select count(repName) from Reps where active = 1) while @datecounter >= @repcounter 	set @datecounter = @datecounter - @repcounter select JobName, RepName, LunchName from jobs inner join (select RepName, LunchName, ((reps.ordering + @datecounter) % @repcounter) + 1 as NewOrder from reps inner join RepLunch on reps.RepKey = repLunch.RepKey inner join Lunch on replunch.LunchKey = lunch.LunchKey) as repcalc on jobs.ordering = repcalc.NewOrder', (error, results) => {
+    await request.query(`Declare	@datecounter int,
+        @repcounter int
+        
+        set @datecounter = (select datediff(WEEK, '2019-12-21 17:25:09.487', getdate()))
+        set @repcounter = (select count(repName) from Reps where active = 1) while @datecounter >= @repcounter
+        set @datecounter = @datecounter - @repcounter
+        
+        select JobName, RepName, LunchName
+        from jobs
+        inner join (select RepName, LunchName, ((reps.ordering + @datecounter) % @repcounter) + 1 as NewOrder
+                    from reps inner join RepLunch on reps.RepKey = repLunch.RepKey
+                    inner join Lunch on replunch.LunchKey = lunch.LunchKey)
+                    as repcalc on jobs.ordering = repcalc.NewOrder`, (error, results) => {
         if (results) res.status(200).send(results.recordset)
         else {
             logSQLError(error); res.status(500).send({ MSG: 'Internal Error: 500' })

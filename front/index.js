@@ -12,13 +12,13 @@ function loadDataIntoTable(data) {
     t.innerHTML = '' //clear out the old data so there is no DOM duplication
 
     data.map(row => {
-        const { jobName, repName, lunchName } = row
+        const { JobName, RepName, LunchName } = row
         let tr = document.createElement('tr')
 
         tr.innerHTML = `
-            <td>${jobName}</td>
-            <td>${repName}</td>
-            <td>${lunchName}</td>
+            <td>${JobName}</td>
+            <td>${RepName}</td>
+            <td>${LunchName}</td>
             `
 
         t.appendChild(tr)
